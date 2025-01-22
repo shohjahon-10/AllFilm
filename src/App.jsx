@@ -1,11 +1,4 @@
 import {
-  Collection,
-  Home,
-  Popular,
-  SearchData,
-  TopRated,
-} from "./components/headers";
-import {
   Box,
   Button,
   Flex,
@@ -18,7 +11,8 @@ import Logo from "./assets/img/kinoLogo.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { NavLink, Route, Routes } from "react-router-dom";
-import { UniqInfo } from "./UniqInfo";
+import { UniqInfo } from "./pages/uniqinfo/UniqInfo";
+import { Collection, Home, Popular } from "./pages";
 
 function App() {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -67,14 +61,14 @@ function App() {
           </Flex>
         </Flex>
       </Box>
-      <SearchData isOpen={isOpen} onClose={onClose} />
+      {/* <SearchData isOpen={isOpen} onClose={onClose} /> */}
 
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/popular" element={<Popular />} />
         <Route path="/films/:filmID" element={<UniqInfo />} />
         <Route path="/collection" element={<Collection />} />
-        <Route path="/topRated" element={<TopRated />} />
+        {/* <Route path="/topRated" element={<TopRated />} /> */}
       </Routes>
     </>
   );

@@ -1,5 +1,4 @@
 import { Box, Image, Text, VStack } from "@chakra-ui/react";
-import axios from "axios";
 import { useEffect, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination, Scrollbar, A11y } from "swiper/modules";
@@ -8,25 +7,17 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/scrollbar";
 import { useNavigate } from "react-router-dom";
+import { privateInstance } from "../../service/client/client";
 
-export function Home() {
-  const [movie, setMovie] = useState([]);
+export function Popular() {
+  const [popularAll, setPopularAll] = useState([]);
   const navigate = useNavigate();
 
-  const url = "https://api.themoviedb.org/3/discover/movie";
-  const options = {
-    headers: {
-      accept: "application/json",
-      Authorization:
-        "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI4ZGE0OGYyNGNlMWRjZmU3YTI2YTA1YmU3YTNhYmEzZSIsIm5iZiI6MTcwNzExMjEyNi43NzMsInN1YiI6IjY1YzA3NmJlNDM5OTliMDE4NGM5ODllOSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ._uGk-QvvbXMxib7CyStOVycDVbZ4Zhg_74K2PkCsXMQ",
-    },
-  };
-
   const fitchData = async () => {
-    const { data } = await axios.get(url, options);
-    setMovie(data.results);
+    const { data } = await privateInstance.get("/movie/upcoming");
+    console.log(data);
+    setPopularAll(data.results);
   };
-
   useEffect(() => {
     fitchData();
   }, []);
@@ -41,7 +32,7 @@ export function Home() {
         pagination={{ clickable: true }}
         scrollbar={{ draggable: true }}
       >
-        {movie?.map((item) => (
+        {popularAll?.map((item) => (
           <SwiperSlide key={item?.id}>
             <VStack
               cursor="pointer"

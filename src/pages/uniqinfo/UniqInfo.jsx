@@ -1,4 +1,3 @@
-import axios from "axios";
 import "./uniqInfo.css";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -15,6 +14,7 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/scrollbar";
+import { privateInstance } from "../../service/client/client";
 
 export function UniqInfo() {
   const [getUniqInfo, setGetUniqInfo] = useState({});
@@ -24,27 +24,10 @@ export function UniqInfo() {
   const [similarAllFilm, setSimilarAllFilm] = useState([]);
   const { filmID } = useParams();
   const navigate = useNavigate();
-  let newNumbers = [];
-  filmID.split("").forEach((e) => {
-    if (!isNaN(Number(e))) {
-      newNumbers.push(e);
-    }
-  });
-
-  const options = {
-    headers: {
-      accept: "application/json",
-      Authorization:
-        "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI4ZGE0OGYyNGNlMWRjZmU3YTI2YTA1YmU3YTNhYmEzZSIsIm5iZiI6MTcwNzExMjEyNi43NzMsInN1YiI6IjY1YzA3NmJlNDM5OTliMDE4NGM5ODllOSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ._uGk-QvvbXMxib7CyStOVycDVbZ4Zhg_74K2PkCsXMQ",
-    },
-  };
 
   const getUniqInfoFormApi = async () => {
     try {
-      const { data } = await axios.get(
-        `https://api.themoviedb.org/3/movie/${newNumbers.join("")}`,
-        options
-      );
+      const { data } = await privateInstance.get("movie/" + filmID);
       setGetUniqInfo(data);
       setLoading(false);
     } catch (err) {
@@ -55,10 +38,7 @@ export function UniqInfo() {
 
   const gitSimilarVideos = async () => {
     try {
-      const { data } = await axios.get(
-        `https://api.themoviedb.org/3/movie/${newNumbers.join("")}/videos`,
-        options
-      );
+      const { data } = await privateInstance.get(`movie/${filmID}/videos`);
       setAllVideos(data.results);
       setLoading(false);
     } catch (err) {
@@ -69,10 +49,7 @@ export function UniqInfo() {
 
   const getSimilar = async () => {
     try {
-      const { data } = await axios.get(
-        `https://api.themoviedb.org/3/movie/${newNumbers.join("")}/similar`,
-        options
-      );
+      const { data } = await privateInstance.get(`movie/${filmID}/similar`);
       setSimilarAllFilm(data.results);
       setLoading(false);
     } catch (err) {
