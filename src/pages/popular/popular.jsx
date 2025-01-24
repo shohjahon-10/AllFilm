@@ -41,12 +41,7 @@ export function Popular() {
               overflow="hidden"
               p={4}
               bg="rgba(4, 4, 4, 0.9)"
-              onClick={() =>
-                navigate(
-                  `/films/${item?.title?.toLowerCase()}-${item?.id}
-                  }`
-                )
-              }
+              onClick={() => navigate(`/films/${item?.id}`)}
             >
               <Text
                 fontSize="20px"

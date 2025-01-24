@@ -15,9 +15,9 @@ import {
 } from "@chakra-ui/react";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { privateInstance } from "../../../service/client/client";
 
 export function SearchData({ isOpen, onClose }) {
   const [searchInputValue, setSearchInput] = useState("");
@@ -28,24 +28,12 @@ export function SearchData({ isOpen, onClose }) {
   const fetechSearchData = async () => {
     if (!searchInputValue.trim()) return;
     setIsLoading(true);
-    try {
-      const url = `https://api.themoviedb.org/3/search/movie?query=${searchInputValue}`;
-      const options = {
-        headers: {
-          accept: "application/json",
-          Authorization:
-            "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI4ZGE0OGYyNGNlMWRjZmU3YTI2YTA1YmU3YTNhYmEzZSIsIm5iZiI6MTcwNzExMjEyNi43NzMsInN1YiI6IjY1YzA3NmJlNDM5OTliMDE4NGM5ODllOSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ._uGk-QvvbXMxib7CyStOVycDVbZ4Zhg_74K2PkCsXMQ",
-        },
-      };
 
-      const { data, status } = await axios.get(url, options);
-      if (status === 200 || status === 201) {
-        setSearchData(data.results);
-      }
-    } catch (error) {
-      console.error("Error fetching search data:", error);
-    } finally {
-      setIsLoading(false);
+    const { data, status } = await privateInstance.get(
+      `search/movie?query=${searchInputValue}`
+    );
+    if (status === 200 || status === 201) {
+      setSearchData(data.results);
     }
   };
 
@@ -112,12 +100,7 @@ export function SearchData({ isOpen, onClose }) {
                     transform: "translateY(-7px)",
                     transition: "0.2s",
                   }}
-                  onClick={() =>
-                    navigate(
-                      `/films/${item?.title?.toLowerCase()}-${item?.id}
-                  }`
-                    )
-                  }
+                  onClick={() => navigate(`/films/${item?.id}`)}
                 >
                   <Box
                     width={"150px"}
