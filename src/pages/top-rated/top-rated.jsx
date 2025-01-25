@@ -21,7 +21,6 @@ export function TopRated() {
   useEffect(() => {
     fitchData();
   }, []);
-  console.log(topRatedData);
 
   return (
     <Box userSelect={"none"} w={"full"} p={4} bg="gray.800" color="white">

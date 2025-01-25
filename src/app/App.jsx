@@ -10,18 +10,17 @@ import {
 import Logo from "../assets/img/kinoLogo.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
-import { NavLink, Route, Routes } from "react-router-dom";
-import { Collection, Home, Popular, TopRated } from "../pages";
-import { UniqInfo } from "../pages";
+import { NavLink, Outlet } from "react-router-dom";
+
 import { SearchData } from "../components/headers";
 
-function App() {
+export function App() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const linkNavList = [
     { path: "/", title: "Home" },
     { path: "/popular", title: "Popular" },
     { path: "/collection", title: "Collection" },
-    { path: "/topRated", title: "Top Rated" },
+    { path: "/top-rated", title: "Top Rated" },
   ];
 
   return (
@@ -64,15 +63,7 @@ function App() {
       </Box>
       <SearchData isOpen={isOpen} onClose={onClose} />
 
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/popular" element={<Popular />} />
-        <Route path="/films/:filmID" element={<UniqInfo />} />
-        <Route path="/collection" element={<Collection />} />
-        <Route path="/topRated" element={<TopRated />} />
-      </Routes>
+      <Outlet />
     </>
   );
 }
-
-export default App;

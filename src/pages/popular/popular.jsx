@@ -15,7 +15,7 @@ export function Popular() {
 
   const fitchData = async () => {
     const { data } = await privateInstance.get("/movie/upcoming");
-    console.log(data);
+
     setPopularAll(data.results);
   };
   useEffect(() => {

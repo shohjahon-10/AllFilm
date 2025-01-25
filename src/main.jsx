@@ -1,13 +1,11 @@
 import { createRoot } from "react-dom/client";
 import "./index.css";
-import App from "./app/App";
-import { BrowserRouter } from "react-router-dom";
+import { RouterProvider } from "react-router-dom";
 import { ChakraProvider } from "@chakra-ui/react";
+import { routes } from "./routes/router";
 
 createRoot(document.getElementById("root")).render(
   <ChakraProvider>
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
+    <RouterProvider router={routes} />
   </ChakraProvider>
 );
