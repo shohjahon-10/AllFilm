@@ -25,34 +25,40 @@ export function SearchData({ isOpen, onClose }) {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
-  const fetechSearchData = async () => {
+  const fetchSearchData = async () => {
     if (!searchInputValue.trim()) return;
-    setIsLoading(true);
 
-    const { data, status } = await privateInstance.get(
-      `search/movie?query=${searchInputValue}`
-    );
-    if (status === 200 || status === 201) {
-      setSearchData(data.results);
+    setIsLoading(true);
+    try {
+      const { data, status } = await privateInstance.get(
+        `search/movie?query=${searchInputValue}`
+      );
+      if (status === 200 || status === 201) {
+        setSearchData(data.results);
+      }
+    } catch (error) {
+      console.error("Xatolik yuz berdi:", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   useEffect(() => {
     const delayDebounceFn = setTimeout(() => {
-      fetechSearchData();
+      fetchSearchData();
     }, 500);
 
     return () => clearTimeout(delayDebounceFn);
   }, [searchInputValue]);
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} size={"xl"}>
+    <Modal isOpen={isOpen} onClose={onClose} size="xl">
       <ModalOverlay
         bg="blackAlpha.500"
         backdropFilter="auto"
-        backdropBlur={"30px"}
+        backdropBlur="30px"
       />
-      <ModalContent userSelect={"none"}>
+      <ModalContent userSelect="none">
         <ModalHeader>
           <InputGroup>
             <InputLeftElement>
@@ -80,66 +86,59 @@ export function SearchData({ isOpen, onClose }) {
             searchData.map((item) => (
               <Flex
                 key={item.id}
-                flexDir={"column"}
-                justify={"center"}
-                alignItems={"center"}
-                gap={20}
-                py={5}
+                alignItems="center"
+                gap={8}
+                border="1px solid rgba(0,0,0,0.2)"
+                p={3}
+                borderRadius="10px"
+                boxShadow="2xl"
+                userSelect="none"
+                cursor="pointer"
+                _hover={{
+                  bgColor: "rgba(0,0,0,0.1)",
+                  transform: "translateY(-7px)",
+                  transition: "0.2s",
+                }}
+                onClick={() => navigate(`/films/${item.id}`)}
+                my={3}
               >
-                <Flex
-                  alignItems={"center"}
-                  gap={8}
-                  border={"1px solid rgba(0,0,0,0.2)"}
-                  p={3}
-                  borderRadius={"10px"}
-                  boxShadow={"2xl"}
-                  userSelect={"none"}
-                  cursor={"pointer"}
-                  _hover={{
-                    bgColor: "rgba(0,0,0,0.1)",
-                    transform: "translateY(-7px)",
-                    transition: "0.2s",
-                  }}
-                  onClick={() => navigate(`/films/${item?.id}`)}
+                <Box
+                  width="150px"
+                  height="200px"
+                  boxShadow="2xl"
+                  borderRadius="20px"
+                  overflow="hidden"
                 >
-                  <Box
-                    width={"150px"}
-                    height={"200px"}
-                    boxShadow={"2xl"}
-                    borderRadius={"20px"}
-                    overflow={"hidden"}
+                  <Image
+                    width="100%"
+                    height="100%"
+                    objectFit="cover"
+                    src={
+                      item.poster_path
+                        ? `https://image.tmdb.org/t/p/w500/${item.poster_path}`
+                        : "https://via.placeholder.com/150x200?text=No+Image"
+                    }
+                    alt={item.title}
+                  />
+                </Box>
+                <Box>
+                  <Text
+                    fontWeight="bold"
+                    fontSize="2rem"
+                    textAlign="center"
+                    as="h1"
                   >
-                    <Image
-                      width={"100%"}
-                      height={"100%"}
-                      objectFit={"cover"}
-                      src={
-                        item.poster_path
-                          ? `https://image.tmdb.org/t/p/w500/${item.poster_path}`
-                          : "https://via.placeholder.com/150x200?text=No+Image"
-                      }
-                      alt={item.title}
-                    />
-                  </Box>
-                  <Box>
-                    <Text
-                      fontWeight={"bold"}
-                      fontSize={"2rem"}
-                      textAlign={"center"}
-                      as={"h1"}
-                    >
-                      {item.title}
-                    </Text>
-                    <Text width={"300px"}>
-                      {item.overview || "No description available."}
-                    </Text>
-                  </Box>
-                </Flex>
+                    {item.title}
+                  </Text>
+                  <Text width="300px" noOfLines={3}>
+                    {item.overview || "No description available."}
+                  </Text>
+                </Box>
               </Flex>
             ))
           ) : (
             <Text textAlign="center" mt={5}>
-              Film Topilmadi
+              Film topilmadi
             </Text>
           )}
         </ModalBody>
